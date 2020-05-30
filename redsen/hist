@@ -1,0 +1,37 @@
+    1  pwd
+    2  jl
+    3  pwd
+    4  mount
+    5  cd /
+    6  ls
+    7  ls -CF
+    8  rm redis-stable.tar.gz 
+    9  ls /redsen
+   10  cd redsen/
+   11  ls
+   12  cd redsen-01/
+   13  l
+   14  cd logs/
+   15  l
+   16  ls -altr
+   17  cd ..
+   18  ls
+   19  cd ..
+   20  ls
+   21  cat bin/redsen.sh 
+   22  cat /redsen/bin/redis.sh 
+   23  daemon --user redsen:redsen --chdir /redsen/redsen-01 /redsen/bin/redis.sh start 01
+   24  echo $?
+   25  ps -aef |grep redis
+   26  echo info | redis-cli 
+   27  pwd
+   28  history
+   29  type daemon
+   30  cd redsen-01/logs/
+   31  l
+   32  cat redis.log 
+   33  /redsen/bin/redis.sh stop 01
+   34  ls
+   35  l
+   36  cat redis.log 
+   37  history >> hh

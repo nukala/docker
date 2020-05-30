@@ -1,0 +1,8 @@
+#!/bin/bash
+
+. ${RHM}/.bashrc
+
+export chkHst="$1"
+
+[ "a${chkHst}B" = "aB" ] && chkHst="localhost"
+chkredis ${chkHst} 6379 26379; chkredis ${chkHst} 6479 26479; chkredis ${chkHst} 6579 26579 

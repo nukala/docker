@@ -1,0 +1,32 @@
+#! /bin/sh
+# /etc/init.d/redsen
+#
+
+REDSEN_CONFS=/redsen/conf
+REDSEN_HOME=/usr/local/bin
+
+export REDSEN_HOME REDSEN_CONFS
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+  start)
+    echo "Starting script redsen "
+
+    /redsen/bin/redis.sh start 01
+    /redsen/bin/sentinel.sh start 01
+    ;;
+
+  stop)
+    echo "Stopping  script redsen "
+
+    /redsen/bin/redis.sh stop 01
+    /redsen/bin/sentinel.sh stop 01
+    ;;
+  *)
+    echo "Usage: /etc/init.d/redsen {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
+
