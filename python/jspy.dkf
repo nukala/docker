@@ -1,0 +1,39 @@
+# vim: filetype=Dockerfile
+
+# debian:Jessie is used here. Add Python support
+
+# docker build -f jspy.dkf -t jspy  .
+FROM base-jess:latest
+
+LABEL maintainer="Ravi Nukala <nukala@gmail.com>"
+
+RUN apt-get update
+
+RUN apt-get install -y python
+RUN apt-get install -y python2.7-doc
+RUN apt-get install -y python-pip
+RUN apt-get install -y python-virtualenv
+
+
+# create a non-root group/user
+RUN groupadd jspygrp
+RUN useradd -s /bin/bash -G jspygrp --comment 'jessie user' --create-home jspyusr
+
+#
+## disable this once done
+RUN echo '# disable once the thing stabilizes' >> /etc/sudoers
+RUN echo 'jspyusr ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+#RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /home/jspyusr/.bashrc
+
+RUN chown -R jspyusr:jspygrp /home/jspyusr
+
+# last command by root
+RUN apt-get clean
+
+WORKDIR /home/jspyusr
+
+USER jspyusr
+
+RUN pip install --user --quiet virtualenvwrapper
+RUN echo 'echo "   >>  source ~/.local/bin/virtualenvwrapper.sh"' >> /home/jspyusr/.bashrc

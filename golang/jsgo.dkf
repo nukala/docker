@@ -1,0 +1,36 @@
+# vim: filetype=Dockerfile
+
+# docker build -f jsgo.dkf -t jess-go .
+FROM base-jess
+
+LABEL maintainer="Ravi Nukala <nukala@gmail.com>"
+
+#
+#
+
+RUN apt-get update 
+
+# ignore the debconf warning (allow reuse)
+#RUN apt-get install -y man
+RUN apt-get install -y golang-go
+
+# lot of space&time. Restores manpages. Uses about 600MB more
+#RUN yes | unminimize 
+
+#
+# create a non-root group/user
+RUN groupadd jsgogrp
+RUN useradd -s /bin/bash -G jsgogrp --comment 'jessie jsgousr' --create-home jsgousr 
+
+#
+## disable this once done
+RUN echo '# disable once the thing stabilizes' >> /etc/sudoers && \
+	echo 'jsgousr ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /home/jsgousr/.bashrc
+
+RUN chown -R jsgousr:jsgogrp /home/jsgousr
+
+WORKDIR /home/jsgousr
+
+USER jsgousr

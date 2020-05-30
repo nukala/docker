@@ -1,0 +1,27 @@
+# vim: filetype=Dockerfile
+
+# gcc and related tools with bionic
+# docker build -f biogcc.dkf -t biogcc  .
+from base-bio
+
+LABEL maintainer="Ravi Nukala <nukala@gmail.com>"
+
+
+
+RUN apt-get update
+
+RUN apt-get install -y build-essential
+RUN apt-get install -y valgrind
+
+#
+# create a non-root group/user
+RUN groupadd gccgrp
+RUN useradd -s /bin/bash -G gccgrp --comment 'bionic gcc user' --create-home biogcc
+
+#
+## disable this once done
+RUN echo '# disable once the thing stabilizes' >> /etc/sudoers && \
+	echo 'biogcc ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+RUN chown -R biogcc:gccgrp /home/biogcc
+WORKDIR /home/biogcc
+USER biogcc

@@ -1,0 +1,32 @@
+# vim: filetype=Dockerfile
+
+# docker build -f gogo.dkf -t go-go .
+FROM golang
+
+LABEL maintainer="Ravi Nukala <nukala@gmail.com>"
+
+#
+#
+
+RUN apt-get update 
+
+# (allow reuse)
+RUN apt-get install -y sudo
+RUN apt-get install -y vim
+
+# create a non-root user
+RUN groupadd gouser
+RUN useradd -c 'go user' -g gouser -l -m -s /bin/bash gouser 
+
+# disable this once done
+RUN echo '# disable once the thing stabilizes' >> /etc/sudoers && \
+	echo 'gouser ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /home/gouser/.bashrc
+
+RUN chown -R gouser:gouser /home/gouser
+
+
+WORKDIR /home/gouser
+
+USER gouser

@@ -1,0 +1,27 @@
+# vim: filetype=Dockerfile
+
+# docker build -f biogo.dkf -t bio-go .
+FROM ubuntu:bionic
+
+LABEL maintainer="Ravi Nukala <nukala@gmail.com>"
+
+
+RUN apt-get update 
+
+RUN apt-get install -y golang-go
+
+# create a non-root group/user
+RUN groupadd gogroup
+RUN useradd -s /bin/bash -G gogroup --comment 'bionic gouser' --create-home gouser 
+
+## disable this once done
+RUN echo '# disable once the thing stabilizes' >> /etc/sudoers && \
+	echo 'gouser ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /home/gouser/.bashrc
+
+RUN chown -R gouser:gouser /home/gouser
+
+WORKDIR /home/gouser
+
+USER gouser

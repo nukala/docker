@@ -1,0 +1,35 @@
+#vim: filetype=Dockerfile
+
+# docker build -f algo.dkf -t alpine-go . 
+FROM alpine
+
+LABEL maintainer="Ravi Nukala <nukala@gmail.com>"
+
+#
+# using apk --no-cache keeps pulling down fslayers
+#
+
+RUN apk update
+RUN apk upgrade
+RUN apk add bash
+
+RUN apk add sudo 
+
+# dependency for golang and its dependency
+RUN apk add musl-dev go
+
+# install git?
+RUN apk add git 
+
+# create a non-root user
+RUN addgroup -S algo 
+RUN adduser -s /bin/bash -D -G algo -g 'alpine gouser' algo 
+
+# disable this once done
+RUN echo '# disable once the thing stabilizes' >> /etc/sudoers && \
+	echo 'algo ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+WORKDIR /home/algo
+
+USER algo
+
