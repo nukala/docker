@@ -1,0 +1,37 @@
+# vim: filetype=Dockerfile
+
+# docker build -f ngnx.dkf -t ngnx .
+FROM nginx
+
+LABEL maintainer="Ravi Nukala <nukala@gmail.com>"
+
+#
+#
+
+RUN apt-get update 
+
+# ignore the debconf warning
+RUN apt-get install -y sudo
+RUN apt-get install -y vim
+RUN apt-get install -y ripgrep
+RUN apt-get install -y sudo 
+
+# lot of space&time. Restores manpages. Uses about 600MB more
+#RUN yes | unminimize 
+
+#
+# create a non-root group/user
+RUN groupadd ngxgrp
+RUN useradd -s /bin/bash -G ngxgrp --comment 'nginx usr' --create-home ngxusr 
+
+#
+## disable this once done
+RUN echo '# disable once the thing stabilizes' >> /etc/sudoers && \
+	echo 'ngxusr ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+
+RUN chown -R ngxusr:ngxgrp /home/ngxusr
+
+WORKDIR /home/ngxusr
+
+USER ngxusr
