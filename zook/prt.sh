@@ -1,3 +1,3 @@
 #!/bin/bash
 
-../grsh zook 2181
+../grvbox zook 2181

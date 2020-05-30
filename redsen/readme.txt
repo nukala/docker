@@ -14,7 +14,7 @@ Todo:
 == 04/27
   * Works from an active terminal. Launch interactively and run the scr script. 
   * docker -d does not work
-  * ports interefere. so export from grsh clashes with vagrant. 
+  * ports interefere. so export from grvbox clashes with vagrant. 
 
 == 04/30 (using scr2 and update-rc.d)
   * does not start in background

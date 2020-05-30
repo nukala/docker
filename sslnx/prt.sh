@@ -1,3 +1,3 @@
 #!/bin/bash
 
-../grsh sslnx 4332
+../grvbox sslnx 4332

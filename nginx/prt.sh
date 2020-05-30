@@ -1,3 +1,3 @@
 #!/bin/bash
 
-../grsh nginx 2663
+../grvbox nginx 2663
