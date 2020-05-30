@@ -1,0 +1,63 @@
+#!/usr/bin/env groovy
+
+void writeToFile(def fileName, def lines) {
+  new File("$fileName").withWriter { out ->
+    lines.each {
+      out.println it
+    }
+  }
+}
+
+def defDockerLines() {
+  def hdrs = []
+
+  hdrs << """#-*- mode: sh -*-
+# vi: set ft=sh :
+
+FROM base
+
+MAINTAINER RAvi Nukala &lt;nukala@gmail.com&gt;
+
+# keep 'em sorted 
+RUN apt-get update \
+	&& apt-get upgrade -y \
+	&& apt-get install -y \
+		vim
+
+RUN groupadd uuu
+RUN adduser --home /home/uuu --disabled-password --gecos 'uuu' --ingroup uuu uuu
+
+# ONLY-while-debugging
+# askubuntu.com/questions/168280/how-do-i-grant-sudo-privileges-to-an-existing-user
+#RUN adduser spx sudo 	\
+#	&& usermod -aG sudo spx
+# askubuntu.com/questions/192050/how-to-run-sudo-command-with-no-password
+#RUN echo "" >> /etc/sudoers \
+#	&& echo '#forcibly add spx with no passwd' >> /etc/sudoers \
+#	&& echo 'spx ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+RUN apt-get clean && apt-get autoclean && apt-get autoremove && apt-get purge && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir /local \
+	&& mkdir /local/conf
+
+RUN chown -R uuu:uuu /local
+
+
+VOLUME ["/uuu"]
+RUN chown -R uuu:uuu /home/uuu
+
+#USER uuu 
+WORKDIR /home/uuu
+"""
+
+  return hdrs;
+}
+
+fn="Dockerfile"
+if (args.length > 0) {
+  fn=args[0]
+}
+
+writeToFile("$fn", defDockerLines())
+println "Wrote to $fn"
