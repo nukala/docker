@@ -1,0 +1,46 @@
+# vim: filetype=Dockerfile
+
+# debian:Jessie is used here. Add Python support
+
+# docker build -f base-jess.dkf -t base-jess  .
+FROM debian:jessie
+
+LABEL maintainer="Ravi Nukala <nukala@gmail.com>"
+
+RUN apt-get update
+
+# https://packages.debian.org/jessie/procps; net-tools -- netstat
+RUN apt-get install -y sudo
+RUN apt-get install -y vim
+RUN apt-get install -y procps
+RUN apt-get install -y net-tools
+RUN apt-get install -y lsof
+RUN apt-get install -y git
+
+#  for ripgrep
+RUN apt-get install -y wget
+#  https://itsfoss.com/install-deb-files-ubuntu/ and https://github.com/BurntSushi/ripgrep/releases
+RUN wget -q -O /tmp/rg.deb https://github.com/BurntSushi/ripgrep/releases/download/12.1.0/ripgrep_12.1.0_amd64.deb
+RUN dpkg -i /tmp/rg.deb
+RUN rm /tmp/rg.deb
+#  for ripgrep
+
+# create a non-root group/user
+RUN groupadd jsgrp
+RUN useradd -s /bin/bash -G jsgrp --comment 'jessie user' --create-home jsusr
+
+#
+## disable this once done
+RUN echo '# disable once the thing stabilizes' >> /etc/sudoers
+RUN echo 'jsusr ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+#RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /home/jsusr/.bashrc
+
+RUN chown -R jsusr:jsgrp /home/jsusr
+
+# last command by root
+RUN apt-get clean
+
+# base containers -- leave as is
+#WORKDIR /home/jsusr
+#USER jsusr

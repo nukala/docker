@@ -1,0 +1,39 @@
+#vim: filetype=Dockerfile
+
+# linuxkit is a minimal linux interesting set of tools and such
+# docker build -f lnkt.dkf -t lnkt-go . 
+FROM linuxkit/kernel
+
+LABEL maintainer="Ravi Nukala <nukala@gmail.com>"
+
+#
+#
+#
+RUN apt-get update 
+
+# ignore the debconf warning (allow reuse)
+RUN apt-get install -y sudo
+RUN apt-get install -y vim
+
+#RUN apt-get install -y golang-go
+
+# lot of space&time. Restores manpages. Uses about 600MB more
+#RUN yes | unminimize 
+
+#
+# create a non-root group/user
+RUN groupadd gogroup
+RUN useradd -s /bin/bash -G gogroup --comment 'bionic gouser' --create-home gouser 
+
+#
+## disable this once done
+RUN echo '# disable once the thing stabilizes' >> /etc/sudoers && \
+	echo 'gouser ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /home/gouser/.bashrc
+
+RUN chown -R gouser:gouser /home/gouser
+
+WORKDIR /home/gouser
+
+USER gouser

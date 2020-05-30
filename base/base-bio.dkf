@@ -1,0 +1,47 @@
+# vim: filetype=Dockerfile
+
+# base-ubuntu
+# docker build -f base-bio.dkf -t base-bio  .
+FROM ubuntu:bionic
+
+LABEL maintainer="Ravi Nukala <nukala@gmail.com>"
+
+#
+#
+
+RUN apt-get update
+
+# ignore the debconf warning (allow reuse)
+#RUN apt-get install -y man
+
+# procps -- /bin/ps ; net-tools -- netstat
+RUN apt-get install -y sudo
+RUN apt-get install -y vim
+RUN apt-get install -y procps
+RUN apt-get install -y net-tools
+RUN apt-get install -y lsof
+
+RUN apt-get install -y git
+RUN apt-get install -y make
+
+
+# lot of space&time. Restores manpages. Uses about 600MB more
+#RUN yes | unminimize
+
+#
+# create a non-root group/user
+RUN groupadd ubngrp
+RUN useradd -s /bin/bash -G ubngrp --comment 'bionic ubuntu user' --create-home ubnusr
+
+#
+## disable this once done
+RUN echo '# disable once the thing stabilizes' >> /etc/sudoers && \
+	echo 'ubnusr ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+#RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /home/ubnusr/.bashrc
+
+RUN chown -R ubnusr:ubnusr /home/ubnusr
+
+# since this is a base ... inheriting dockers run as this user. Hence comment
+#WORKDIR /home/ubnusr
+#USER ubnusr
