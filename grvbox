@@ -1,0 +1,65 @@
+#!/usr/bin/env groovy
+
+###########################################################################
+# To modify virtual box environment. 
+#
+# In days prior, docker required virtual box and this script helped fix vbox so that ports are visible from bare-metal box
+###########################################################################
+
+def runCmd(String cmd) {
+ println "Executing [$cmd]"
+ def p = ["/bin/bash", "-c", cmd ].execute();
+// p.waitFor();
+ p.waitForProcessOutput(System.out, System.err)
+ if (p.exitValue() != 0) 
+   println "\n\t>>> Command [$cmd] failed with status=" + p.exitValue() + "\n"
+
+ return p;
+}
+
+debug=false
+app=null
+port=null
+
+if (debug) println "len=" + args.length
+if (args.length >= 1) 
+  app = args[0]
+
+if (args.length >= 2)
+  port = args[1]
+
+if (debug) println "app=[$app], port=($port), class=(" + port.getClass() + "), args.length=" + args.length
+//System.exit 9
+
+
+// use cmd line args
+String.metaClass.getNotBlank = { !delegate?.allWhitespace }
+
+if (!app) {
+  app = System.console().readLine 'name of the app> '
+  if (app?.allWhitespace) {
+    println "Name of the app($app) is required"
+    System.exit 1
+  }
+}
+
+if (!port) {
+  port = System.console().readLine 'port to open up> '
+  if (port?.allWhitespace) {
+    println "Port($port) is required"
+    System.exit 1
+  }
+}
+
+if (port.toInteger() < 1024) {
+  println "port($port) < 1024 is reserved, may need root access "
+  System.exit 1
+}
+if (debug) println "app=[$app], port=($port), class=(" + port.getClass() + ")"
+if (debug) System.exit 9
+
+def tcp=""" VBoxManage modifyvm "dev" --natpf1 "$app-tcp$port,tcp,,$port,,$port" """
+runCmd(tcp)
+
+def udp=""" VBoxManage modifyvm "dev" --natpf1 "$app-udp$port,udp,,$port,,$port" """
+runCmd(udp)
