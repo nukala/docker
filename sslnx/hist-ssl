@@ -1,0 +1,46 @@
+apt-get update
+apt-get install -y libpcre3 libpcre3-dev libpng-dev zlib1g-dev libssl-dev
+
+mkdir -p /tmp/os2
+cd /tmp/os2
+wget https://www.openssl.org/source/openssl-1.0.2d.tar.gz
+gunzip -dc openssl-1.0.2d.tar.gz | tar xvf -
+cd openssl-1.0.2d
+./config --prefix=/usr
+make 
+make install; echo "install=$?"
+
+mkdir -p /tmp/nx97
+cd /tmp/nx97
+wget http://nginx.org/download/nginx-1.8.0.tar.gz
+./configure --with-http_ssl_module 
+pwd
+gunzip -dc nginx-1.8.0.tar.gz | tar xvf -
+cd nginx-1.8.0
+./configure --with-http_ssl_module 
+make ; echo "Build=$?"
+
+
+====
+#echo "deb http://ppa.launchpad.net/nginx/$nginx/ubuntu lucid main" > /etc/apt/sources.list.d/nginx-$nginx-lucid.list
+#apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys C300EE8C
+# openssl x509 -text -in nginx2.crt | grep -A2 -i subj
+
+add-apt-repository -y ppa:nginx/stable; echo "add-repo=$?"
+apt-get update; echo "update=$?"
+apt-get upgrade -y; echo "upgrade=$?"
+openssl version -a
+
+apt-get install -y nginx; echo "install=$?"
+nginx -v
+nginx -t -c /data/nginx/ssl.conf 
+
+mkdir -p /data/logs/nginx
+nginx -c /data/nginx/ssl.conf
+lsof -P | grep nginx
+start-stop-daemon --stop --pidfile /data/logs/sslnx/sslnx.pid 
+
+=== ALDEA ===
+SUCCESS> curl -verbose -tls --insecure https://localhost:4332/dn/ (shows TLS 1.2 connection)
+SUCCESS> nmap --script ssl-enum-ciphers -p 4332 localhost  (shows 1.2)
+FAILURE> openssl s_client -debug -tlsextdebug -status -msg -state -host localhost -port 4332 -key ./dta/ssl/nginx.key  -no_tls1 -no_ssl3 -no_ssl2 
