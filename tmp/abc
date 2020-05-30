@@ -1,0 +1,42 @@
+#!/bin/bash
+
+#################################################################
+# Docker documentation says that we should be able to:
+#  while true; do echo i am alive; sleep 60; done
+# boot2docker does not allow such syntax
+#  it stops the process, so . . .
+#
+#   www.maori.geek.nz/post/boot_2_docker_how_to_set_up_postgres_elasticsearch_and_redis_on_mac_os_x
+#################################################################
+
+if [ "$1" = "-bash" ]
+then 
+  /bin/bash
+elif [ "$1" = "-fg" -o "$1" = "--fg" ] 
+then
+  #
+  # WORKER SCRIPTS (daemons) for boot2docker 1.6
+  # 
+  if [ ! -f worker.sh ]
+  then
+    echo "Needs a script \"worker.sh\" in local direcory [`pwd`] "
+    /bin/ls -CF --color -altrd
+    echo " Giving up !" 
+    exit 1
+  fi
+
+  ./worker.sh &
+
+  sleep 10; echo "`date` - Waiting in foregorund . . ."
+  while true 
+  do
+    sleep 195
+    echo `date` - alive 
+  done
+else
+  echo "arg = [$1]" 
+  echo "Usage: wait for ever and get stopped by kill -s 2 "
+  echo "      -bash   run a shell"
+  echo "      -fg     keep waiting in foreground "
+  exit 1
+fi
