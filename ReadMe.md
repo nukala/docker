@@ -1,13 +1,15 @@
-Introduction:
+Introduction
+============
  While I experiment with various infrastructure(s), programming environment(s), and language(s) -- I prefer not to play around on the bare-metal OS. Primarily due to fear of breaking something existing. Case in point:
   - MacOS comes bundled with an ancient version of Python
-  - Day job might require use of 3.7 or 2.7
+  - Day job requires use of 2.7
   - Most new articles talk about using the latest version, at this time, 3.8
 
  My answer to those is to run experiments in a mostly disposable docker container and mount source folders as needed. Granted that this might increase bandwidth usage, but my day-job will not be significantly impacted.
 
 
-==== NOTES === 
+NOTES
+-----
 To fix "Error response from daemon: client and server don't have same version (client : 1.14, server: 1.13)". Somehow related to recent update of both server and remote-control programs. Temporary trashing cleared up.
  boot2docker halt; boot2docker destroy
  /bin/rm -vrf ~/.boot2docker
@@ -28,7 +30,7 @@ data : shared folder as volume
  zook : jdk + ; works, look at the readme
 
 == 04/19
- rethindb : dev + rethinkdb; works as expected. Unfortuantely no java7 drivers 
+ rethindb : dev + rethinkdb; works as expected. Unfortuantely no java7 drivers
 
 == 04/21
  redis : 3 pair of sentinel redis servers (like my vagrant)
