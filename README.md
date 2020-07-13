@@ -1,8 +1,8 @@
 Introduction
 ============
- While I experiment with various infrastructure(s), programming environment(s), and language(s) -- I prefer not to play around on the bare-metal OS. Primarily due to fear of breaking something existing. Case in point:
+ While I experiment with various infrastructure(s), programming environment(s), and language(s) -- I prefer not to play around on the bare-metal/host OS. Primarily due to fear of breaking something existing. Case in point:
   - MacOS comes bundled with an ancient version of Python
-  - Day job requires use of 2.7
+  - Day job requires use of python 2.x
   - Most new articles talk about using the latest version, at this time, 3.8
 
  My answer to those is to run experiments in a mostly disposable docker container and mount source folders as needed. Granted that this might increase bandwidth usage, but my day-job will not be significantly impacted.
