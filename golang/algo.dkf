@@ -10,16 +10,17 @@ LABEL maintainer="Ravi Nukala <nukala@gmail.com>"
 #
 
 RUN apk update
-RUN apk upgrade
-RUN apk add bash
 
-RUN apk add sudo 
+RUN apk upgrade
+
+RUN apk add bash \
+    sudo \
+    git 
 
 # dependency for golang and its dependency
 RUN apk add musl-dev go
 
 # install git?
-RUN apk add git 
 
 # create a non-root user
 RUN addgroup -S algo 
