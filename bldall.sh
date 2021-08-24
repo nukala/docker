@@ -2,7 +2,7 @@
 
 ################################################################
 # xm43406=docker run --restart always --name mysql8 --publish 43306:3306 -e MYSQL_ROOT_PASSWORD=r00t mysql:8.0
-#
+#  environment: MYSQL_DATABASE: worker_test MYSQL_ALLOW_EMPTY_PASSWORD: 'yes' MYSQL_ROOT_HOST: '%'
 # 
 ################################################################
 [ "x${SHDEBUG}Y" = "xtrueY" ] && set -x
