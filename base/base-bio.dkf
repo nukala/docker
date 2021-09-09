@@ -42,10 +42,17 @@ RUN rm /tmp/rg.deb
 RUN groupadd ubngrp
 RUN useradd -s /bin/bash -G ubngrp --comment 'bionic ubuntu user' --create-home ubnusr
 
+# ONLY-while-debugging
+# askubuntu.com/questions/168280/how-do-i-grant-sudo-privileges-to-an-existing-user
+RUN adduser ubnusr sudo 	\
+	&& usermod -aG sudo ubnusr
+# askubuntu.com/questions/192050/how-to-run-sudo-command-with-no-password
 #
-## disable this once done
-RUN echo '# disable once the thing stabilizes' >> /etc/sudoers && \
-	echo 'ubnusr ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+RUN echo "" >> /etc/sudoers \
+	echo '# disable once the thing stabilizes' >> /etc/sudoers && \
+	&& echo 'ubnusr ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
+# ONLY-while-debugging
+
 
 #RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /home/ubnusr/.bashrc
 
