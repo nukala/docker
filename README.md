@@ -8,6 +8,12 @@ Introduction
  My answer to those is to run experiments in a mostly disposable docker container and mount source folders as needed. Granted that this might increase bandwidth usage, but my day-job will not be significantly impacted.
 
 
+Docker alias used:
+-----------------
+  `docker -D --dns 8.8.8.8 --dns 8.8.4.4 '
+      AND
+  `docker -D --dns 8.8.8.8 --dns 8.8.4.4 --ip 127.0.0.1'
+
 NOTES
 -----
 To fix "Error response from daemon: client and server don't have same version (client : 1.14, server: 1.13)". Somehow related to recent update of both server and remote-control programs. Temporary trashing cleared up.
