@@ -29,18 +29,27 @@ mongo: inspired by http://docs.docker.com/examples/mongodb/
 data : shared folder as volume
 
 
-=== 04/15
+Release Notes
+======
+
+-- 04/15/2020
  base : base ubuntu, mostly bare + wget + curl
  dev : base + vim + gcc + make + python and dev tools + man pages
  jdk : base + oracle jdk7
  zook : jdk + ; works, look at the readme
 
-== 04/19
+-- 04/19/2021
  rethindb : dev + rethinkdb; works as expected. Unfortuantely no java7 drivers
 
-== 04/21
+-- 04/21/2021
  redis : 3 pair of sentinel redis servers (like my vagrant)
 
-== 05/20
+-- 05/20/2021
 dkimg | head -10; echo -n 'continue> '; read ans; dkrmi `dkimg | head -10 | awk ' { print $3 } '`
 dkimg; echo -n 'continue> '; read ans; dkrmi `dkimg | awk ' { print $3 } '`
+
+
+-- 07/13/2024
+docker build -t blah:blah -f Dockerfile . 
+https://stackoverflow.com/questions/3042437/how-can-i-change-the-commit-author-for-a-single-commit
+https://medium.com/@RoussiAbel/optimizing-java-base-docker-images-size-from-674mb-to-58mb-c1b7c911f622 (for jlink)
